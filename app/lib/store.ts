@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import commentsReducer from '@/app/lib/redux/messageSlice';
+import commentsReducer from '@/app/lib/redux/commentSlice';
 
 export const makeStore = () => {
     return configureStore({

@@ -1,30 +1,26 @@
 'use client';
 
 import { useForm } from "react-hook-form";
-import Image from 'next/image';
-import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addComment } from "@/app/lib/redux/messageSlice";
+import { addComment } from "@/app/lib/redux/commentSlice";
+import { Schema, SchemaType } from "@/app/lib/schema";
+import { zodResolver } from '@hookform/resolvers/zod'
 
 export default function Comment() {
     const dispatch = useDispatch();
-
-    const [comment, setComment] = useState("");
 
     const {
         handleSubmit,
         register,
         reset,
-        formState: { isSubmitting, isValid },
-    } = useForm({
+        formState: { errors, isSubmitting, isValid },
+    } = useForm<SchemaType>({
         mode: "onChange",
+        resolver: zodResolver(Schema)
     });
 
     const onSubmit = handleSubmit(data => {
-        if (comment.trim()) {
-            dispatch(addComment(comment));
-            setComment("");
-        }
+        dispatch(addComment(data.comment));
         reset();
     });
 
@@ -36,17 +32,23 @@ export default function Comment() {
                 className="w-10 h-10 rounded-full"
             />
             <input
+                {...register("comment")}
+                id="comment"
+                name="comment"
                 type="text"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                // value={comment}
+                // onChange={(e) => setComment(e.target.value)}
                 placeholder="Add a comment..."
                 className="flex-grow p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
+            {errors?.comment && <p className="text-red">{errors?.comment?.message}</p>}
+
             <button
                 type="submit"
+                disabled={isSubmitting || !isValid}
                 className="px-4 py-2 text-white bg-purple-500 rounded-lg hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
-                Send
+                {isSubmitting ? "Sending..." : "Send"}
             </button>
         </form>
     );

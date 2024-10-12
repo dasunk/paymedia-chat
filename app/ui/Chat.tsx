@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/lib/store";
+import { addComment } from "@/app/lib/redux/commentSlice";
 
 interface Comment {
     id: number;
@@ -14,46 +15,20 @@ interface Comment {
 }
 
 const Chat: React.FC = () => {
-    // const [comments, setComments] = useState<Comment[]>([
-    //     {
-    //         id: 1,
-    //         user: "amyrobson",
-    //         text:
-    //             "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You’ve nailed the design and the responsiveness at various breakpoints works really well.",
-    //         date: "1 month ago",
-    //         votes: 12,
-    //     },
-    //     {
-    //         id: 2,
-    //         user: "maxblagun",
-    //         text:
-    //             "Woah, your project looks awesome! How long have you been coding for? I’m still new, but think I want to dive into React as well soon. Perhaps you can give me an insight on where I can learn React? Thanks!",
-    //         date: "2 weeks ago",
-    //         votes: 5,
-    //         replies: [
-    //             {
-    //                 id: 3,
-    //                 user: "ramsesmiron",
-    //                 text:
-    //                     "If you’re still new, I’d recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It’s very tempting to jump ahead but lay a solid foundation first.",
-    //                 date: "1 week ago",
-    //                 votes: 4,
-    //             },
-    //             {
-    //                 id: 4,
-    //                 user: "juliosomo",
-    //                 text:
-    //                     "I couldn’t agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.",
-    //                 date: "2 days ago",
-    //                 votes: 2,
-    //             },
-    //         ],
-    //     },
-    // ]);
+    const dispatch = useDispatch();
 
     const comments = useSelector((state: RootState) => state.comments.comments);
 
     const handleVote = (id: number, isUpvote: boolean) => {
+        //TODO: Handle add vote
+        // comments.map((comment: Comment) => {
+        //     if (comment.id === id) {
+        //         comment.votes += isUpvote ? 1 : -1;
+        //         dispatch(
+        //             addComment(comment.text)
+        //         );
+        //     }
+        // })
         // setComments((prevComments) =>
         //     prevComments.map((comment) =>
         //         comment.id === id
@@ -62,6 +37,16 @@ const Chat: React.FC = () => {
         //     )
         // );
     };
+
+    const handleReplay = () => {
+        // TODO: Add new comment with reply
+        // dispatch(
+        //     addComment(
+        //         "Reply text goes here",
+        //         comments.find((comment) => comment.id === id)?.user
+        //     )
+        // );
+    }
 
     return (
         <div className="p-4 max-w-2xl mx-auto">
@@ -78,10 +63,22 @@ const Chat: React.FC = () => {
                             </button>
                         </div>
                         <div className="flex-grow">
-                            <p className="text-gray-700 font-semibold">{comment.user}</p>
+                            <div className="flex space-x-1">
+                                <img
+                                    src="/path-to-avatar" // Replace with the actual image path
+                                    alt="User Avatar"
+                                    className="w-10 h-10 rounded-full"
+                                />
+                                <p className="text-gray-700 font-semibold">{comment.user}</p>
+                            </div>
                             <p className="text-gray-500 text-sm">{comment.date}</p>
                             <p className="mt-2 text-gray-900">{comment.text}</p>
-                            <button className="text-purple-500 text-sm mt-2">Reply</button>
+                            <button
+                                onClick={() => handleReplay()}
+                                className="text-purple-500 text-sm mt-2"
+                            >
+                                Reply
+                            </button>
 
                             {/* Display replies if any */}
                             {/* {comment.replies && (
