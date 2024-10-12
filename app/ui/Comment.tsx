@@ -3,8 +3,12 @@
 import { useForm } from "react-hook-form";
 import Image from 'next/image';
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addComment } from "@/app/lib/redux/messageSlice";
 
 export default function Comment() {
+    const dispatch = useDispatch();
+
     const [comment, setComment] = useState("");
 
     const {
@@ -17,7 +21,10 @@ export default function Comment() {
     });
 
     const onSubmit = handleSubmit(data => {
-        console.log("data", data);
+        if (comment.trim()) {
+            dispatch(addComment(comment));
+            setComment("");
+        }
         reset();
     });
 
