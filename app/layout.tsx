@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/app/ui/globals.css";
 import { inter } from "@/app/ui/fonts";
+import StoreProvider from "@/app/StoreProvider";
 
 export const metadata: Metadata = {
   title: "PayMedia Chat",
@@ -14,7 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${inter.className} antialiased`}>
+        <StoreProvider>
+          {children}
+        </StoreProvider>
+      </body>
     </html>
   );
 }
